@@ -1,0 +1,133 @@
+openapi: 3.0.0
+info:
+  title: Mortgage API
+  version: 1.0.0
+  description: API for mortgage checks
+
+paths:
+  /interest-rates:
+    get:
+      summary: Get a list of current interest rates
+      operationId: getInterestRates
+      tags:
+        - Mortgage
+      responses:
+        '200':
+          description: A list of current interest rates
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MortgageRate'
+        '400':
+          description: Bad request due to invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /mortgage-check:
+    post:
+      summary: Check if a mortgage is feasible
+      operationId: checkMortgageFeasibility
+      tags:
+        - Mortgage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MortgageCheckRequest'
+      responses:
+        '200':
+          description: The mortgage check result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MortgageCheckResponse'
+        '400':
+          description: Bad request due to invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    MortgageRate:
+      type: object
+      properties:
+        maturityPeriod:
+          type: integer
+          description: The maturity period in years
+          example: 20
+        interestRate:
+          type: number
+          format: double
+          minimum: 0
+          maximum: 1
+          description: The interest rate as a decimal between 0 and 1
+          example: 0.11
+        lastUpdate:
+          type: string
+          format: date-time
+          description: The timestamp of the last update
+          example: "2020-06-14T10:00:00"
+
+    MortgageCheckRequest:
+      type: object
+      properties:
+        income:
+          type: number
+          format: double
+          description: The income of the applicant
+        maturityPeriod:
+          type: integer
+          description: The maturity period of the mortgage
+        loanValue:
+          type: number
+          format: double
+          description: The value of the mortgage loan
+        homeValue:
+          type: number
+          format: double
+          description: The value of the home
+      required:
+        - income
+        - maturityPeriod
+        - loanValue
+        - homeValue
+
+    MortgageCheckResponse:
+      type: object
+      properties:
+        feasible:
+          type: boolean
+          description: Whether the mortgage is feasible or not
+        monthlyCost:
+          type: number
+          format: double
+          description: The monthly cost of the mortgage if feasible
+
+    ErrorResponse:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          description: A unique error code to identify the error type
+        errorMessage:
+          type: string
+          description: A detailed description of the error
