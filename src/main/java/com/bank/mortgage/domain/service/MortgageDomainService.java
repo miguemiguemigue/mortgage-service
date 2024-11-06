@@ -34,19 +34,24 @@ public class MortgageDomainService {
          */
 
         BigDecimal maxAllowedLoanByIncome = mortgageApplicant.getIncome().multiply(BigDecimal.valueOf(4));
-        BigDecimal homeValue = mortgageApplicant.getHomeValue();
+        boolean loanExceedsFourTimesIncome = mortgageApplicant.getLoanValue().compareTo(maxAllowedLoanByIncome) > 0;
+        boolean loanExceedsHomeValue = mortgageApplicant.getLoanValue().compareTo(mortgageApplicant.getHomeValue()) > 0;
 
-        if (mortgageApplicant.getLoanValue().compareTo(maxAllowedLoanByIncome) > 0 ||
-                mortgageApplicant.getLoanValue().compareTo(homeValue) > 0) {
+        if (loanExceedsFourTimesIncome) {
+            log.info("Loan exceeds 4 times the income. Mortgage is not feasible.");
+        }
 
-            log.info("Mortgage is not feasible");
+        if (loanExceedsHomeValue) {
+            log.info("Loan exceeds the home value. Mortgage is not feasible.");
+        }
+
+        if (loanExceedsFourTimesIncome || loanExceedsHomeValue) {
             // If not feasible, return with 0 monthly cost
             return MortgageFeasibilityResult.builder()
                     .feasible(false)
                     .monthlyCost(BigDecimal.ZERO)
                     .build();
         }
-
         // If feasible, calculates monthly cost
         BigDecimal monthlyCost = calculateMonthlyCostFixedRateMortgage(mortgageRate.getMaturityPeriod(),
                 mortgageRate.getInterestRate(), mortgageApplicant.getLoanValue());
@@ -76,9 +81,12 @@ public class MortgageDomainService {
     private BigDecimal calculateMonthlyCostFixedRateMortgage(Integer maturityPeriod, BigDecimal interestRate,
                                                              BigDecimal loanValue) {
 
+        // i
         BigDecimal monthlyInterestRate = interestRate.divide(BigDecimal.valueOf(12), MathContext.DECIMAL128);
+        // n
         int numPayments = maturityPeriod * 12;
 
+        // (1+i)^n
         BigDecimal onePlusMonthlyInterestRatePowNumPayments =
                 BigDecimal.ONE.add(monthlyInterestRate).pow(numPayments, MathContext.DECIMAL128);
 
