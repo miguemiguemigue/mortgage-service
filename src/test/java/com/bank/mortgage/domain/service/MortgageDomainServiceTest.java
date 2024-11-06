@@ -91,7 +91,7 @@ public class MortgageDomainServiceTest {
 
         // Then:
         assertThat(result.isFeasible()).isTrue();
-        assertThat(result.getMonthlyCost()).isCloseTo(expectedMonthlyCost, Percentage.withPercentage(0.01));
+        assertThat(result.getMonthlyCost()).isEqualTo(expectedMonthlyCost);
     }
 
 }

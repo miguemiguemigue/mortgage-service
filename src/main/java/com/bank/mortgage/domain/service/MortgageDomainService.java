@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.math.RoundingMode;
 
 @Slf4j
 public class MortgageDomainService {
@@ -93,7 +94,9 @@ public class MortgageDomainService {
         BigDecimal numerator = monthlyInterestRate.multiply(onePlusMonthlyInterestRatePowNumPayments);
         BigDecimal denominator = onePlusMonthlyInterestRatePowNumPayments.subtract(BigDecimal.ONE);
 
-        return loanValue.multiply(numerator).divide(denominator, MathContext.DECIMAL128);
+        return loanValue.multiply(numerator)
+                .divide(denominator, MathContext.DECIMAL128)
+                .setScale(2, RoundingMode.HALF_UP);
     }
 
 }
