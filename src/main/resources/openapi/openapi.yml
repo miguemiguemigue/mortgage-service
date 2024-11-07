@@ -19,7 +19,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/MortgageRate'
+                  $ref: '#/components/schemas/MortgageRateResponse'
         '400':
           description: Bad request due to invalid input
           content:
@@ -58,8 +58,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-        '500':
-          description: Internal server error
+        '404':
+          description: Mortgage not found for the given parameters
           content:
             application/json:
               schema:
@@ -67,7 +67,7 @@ paths:
 
 components:
   schemas:
-    MortgageRate:
+    MortgageRateResponse:
       type: object
       properties:
         maturityPeriod:
@@ -90,21 +90,28 @@ components:
     MortgageCheckRequest:
       type: object
       properties:
+        maturityPeriod:
+          type: integer
+          description: The maturity period of the mortgage
+          minimum: 1
         income:
           type: number
           format: double
           description: The income of the applicant
-        maturityPeriod:
-          type: integer
-          description: The maturity period of the mortgage
+          minimum: 0
+          exclusiveMinimum: true
         loanValue:
           type: number
           format: double
           description: The value of the mortgage loan
+          minimum: 0
+          exclusiveMinimum: true
         homeValue:
           type: number
           format: double
           description: The value of the home
+          minimum: 0
+          exclusiveMinimum: true
       required:
         - income
         - maturityPeriod

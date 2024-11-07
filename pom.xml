@@ -98,6 +98,7 @@
 								<apiPackage>${project.groupId}.mortgage.infrastructure.adapter.in.rest.controller</apiPackage>
 								<modelPackage>${project.groupId}.mortgage.infrastructure.adapter.in.rest.dto</modelPackage>
 								<useResponseEntity>true</useResponseEntity>
+								<dateLibrary>java8-localdatetime</dateLibrary>
 								<useLocalDateTime>true</useLocalDateTime>
 							</configOptions>
 						</configuration>
