@@ -118,3 +118,38 @@ Flyway is configured to initialize the H2 database with test data on startup.
 
 ---
 
+## Endpoints
+
+Service is listening in default port 8080
+
+Complete details about the API specs in /src/main/resources/openapi/openapi.yml
+
+### `GET /v1/api/interest-rates`
+
+**Description**: Retrieve the current list of mortgage interest rates.
+
+**Response**:
+- **200 OK**: A list of interest rates with the following fields:
+  - `maturityPeriod` (integer): The maturity period in years.
+  - `interestRate` (double): The interest rate as a percentage.
+  - `lastUpdate` (timestamp): The last update timestamp.
+
+---
+
+### `POST /v1/api/mortgage-check`
+
+**Description**: Perform a mortgage check to determine feasibility and calculate monthly costs.
+
+**Parameters** (JSON body):
+- `income` (double, required): Applicant’s monthly income.
+- `maturityPeriod` (integer, required): Mortgage maturity period in years.
+- `loanValue` (double, required): The mortgage loan amount.
+- `homeValue` (double, required): The value of the home.
+
+**Response**:
+- **200 OK**: Returns mortgage feasibility and monthly cost details:
+  - `feasible` (boolean): Indicates if the mortgage is feasible.
+  - `monthlyCost` (double): The monthly cost of the mortgage.
+- **400 Bad Request**: If the request data is invalid.
+- **404 Not Found**: If no matching interest rate is found for the specified maturity period.
+
