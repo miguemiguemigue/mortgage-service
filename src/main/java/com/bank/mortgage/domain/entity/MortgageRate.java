@@ -2,6 +2,7 @@ package com.bank.mortgage.domain.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * Represents a mortgage rate.
@@ -79,4 +80,16 @@ public class MortgageRate {
 
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MortgageRate that = (MortgageRate) o;
+        return maturityPeriod.equals(that.maturityPeriod) && interestRate.equals(that.interestRate) && lastUpdate.equals(that.lastUpdate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(maturityPeriod, interestRate, lastUpdate);
+    }
 }

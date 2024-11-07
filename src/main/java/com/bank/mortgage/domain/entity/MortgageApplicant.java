@@ -1,6 +1,7 @@
 package com.bank.mortgage.domain.entity;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * Represents a mortgage applicant in the system.
@@ -76,5 +77,18 @@ public class MortgageApplicant {
         public MortgageApplicant build() {
             return new MortgageApplicant(this);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MortgageApplicant that = (MortgageApplicant) o;
+        return income.equals(that.income) && loanValue.equals(that.loanValue) && homeValue.equals(that.homeValue);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(income, loanValue, homeValue);
     }
 }

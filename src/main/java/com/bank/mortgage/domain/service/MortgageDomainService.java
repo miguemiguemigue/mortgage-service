@@ -110,22 +110,22 @@ public class MortgageDomainService {
     private void validateMortgageData(MortgageRate mortgageRate, MortgageApplicant mortgageApplicant) {
         // Validaciones de entrada
         if (mortgageApplicant.getIncome() == null || mortgageApplicant.getIncome().compareTo(BigDecimal.ZERO) <= 0) {
-            log.warn("Invalid income: {}. It must be greater than zero.", mortgageApplicant.getIncome());
+            log.error("Invalid income: {}. It must be greater than zero.", mortgageApplicant.getIncome());
             throw new MortgageDomainException("Invalid income: It must be greater than zero.");
         }
 
         if (mortgageApplicant.getLoanValue() == null || mortgageApplicant.getLoanValue().compareTo(BigDecimal.ZERO) <= 0) {
-            log.warn("Invalid loan value: {}. It must be greater than zero.", mortgageApplicant.getLoanValue());
+            log.error("Invalid loan value: {}. It must be greater than zero.", mortgageApplicant.getLoanValue());
             throw new MortgageDomainException("Invalid loan value: It must be greater than zero.");
         }
 
         if (mortgageApplicant.getHomeValue() == null || mortgageApplicant.getHomeValue().compareTo(BigDecimal.ZERO) <= 0) {
-            log.warn("Invalid home value: {}. It must be greater than zero.", mortgageApplicant.getHomeValue());
+            log.error("Invalid home value: {}. It must be greater than zero.", mortgageApplicant.getHomeValue());
             throw new MortgageDomainException("Invalid home value: It must be greater than zero.");
         }
 
         if (mortgageRate.getMaturityPeriod() == null || mortgageRate.getMaturityPeriod() <= 0) {
-            log.warn("Invalid maturity period: {}. It must be greater than zero.", mortgageRate.getMaturityPeriod());
+            log.error("Invalid maturity period: {}. It must be greater than zero.", mortgageRate.getMaturityPeriod());
             throw new MortgageDomainException("Invalid maturity period: It must be greater than zero.");
         }
     }

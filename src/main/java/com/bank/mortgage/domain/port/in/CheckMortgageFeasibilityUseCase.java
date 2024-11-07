@@ -15,7 +15,7 @@ public interface CheckMortgageFeasibilityUseCase {
      * @param homeValue,      home's applicant value
      * @return A MortgageFeasibilityResult, containing the viability of the mortgage and the monthly cost, if applicable
      */
-    MortgageFeasibilityResult checkMortgageFeasibility(BigDecimal income, Integer maturityPeriod, BigDecimal loanValue,
+    MortgageFeasibilityResult checkMortgageFeasibility(Integer maturityPeriod, BigDecimal income, BigDecimal loanValue,
                                                        BigDecimal homeValue);
 
 }

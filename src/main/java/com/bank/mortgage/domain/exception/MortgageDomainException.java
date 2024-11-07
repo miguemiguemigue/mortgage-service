@@ -1,6 +1,6 @@
 package com.bank.mortgage.domain.exception;
 
-public class MortgageDomainException extends RuntimeException {
+public class MortgageDomainException extends DomainException {
 
     public MortgageDomainException(String message) {
         super(message);
