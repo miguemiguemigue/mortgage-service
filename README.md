@@ -114,7 +114,7 @@ mvn spring-boot:run
 
 ### 5. Initialize the Database
 
-Flyway is configured to initialize the H2 database with test data on startup, if necessary.
+Flyway is configured to initialize the H2 database with test data on startup.
 
 ---
 
