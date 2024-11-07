@@ -35,7 +35,7 @@ I tried to stick to the requirements, based on expected functionality and expect
 * **OpenAPI** integration for endpoint documentation
 * **In-memory initialization** of mortgage rates at startup
 
-### Framework decision
+### Framework decisions
 1. H2 in-memory relational database
 * Requirements expected the mortgage rates to be created in-memory on application startup.
 * Mortgage rate structure is mostly fixed, not expecting a wide variety of different interest rates to manage.
