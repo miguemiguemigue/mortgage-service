@@ -56,6 +56,22 @@ While I tried to stick to the requirements, I wanted to define some improvements
 ### Technical improvements
 * Change in-memory database for PostgreSQL as a production-ready solution
   * Use TestContainers for integration tests
+
+## Default Mortgage Rates
+
+On application startup, the following mortgage rates are initialized in memory by default. These rates are configured with different `maturityPeriod` values and their corresponding `interestRate`, along with a `lastUpdate` timestamp.
+
+| Maturity Period (Years) | Interest Rate (%) | Last Update                |
+|-------------------------|-------------------|----------------------------|
+| 5                       | 3.0               | 2024-11-07T14:56:38.469    |
+| 10                      | 3.5               | 2024-11-07T14:56:38.469    |
+| 15                      | 4.0               | 2024-11-07T14:56:38.469    |
+| 20                      | 4.5               | 2024-11-07T14:56:38.469    |
+| 25                      | 5.0               | 2024-11-07T14:56:38.469    |
+| 30                      | 5.5               | 2024-11-07T14:56:38.469    |
+
+These rates can be accessed through the `/api/interest-rates` endpoint. This setup allows for quick testing and verification of mortgage calculations with a variety of `maturityPeriod` and `interestRate` combinations.
+
 ## Requirements
 
 - JDK 17
