@@ -7,6 +7,7 @@ import com.bank.mortgage.infrastructure.adapter.in.rest.dto.ErrorResponse;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -77,6 +78,15 @@ public class GlobalExceptionHandler {
     public ErrorResponse handleException(IllegalArgumentException illegalArgumentException) {
         log.error(illegalArgumentException.getMessage(), illegalArgumentException);
         return buildErrorResponse(HttpStatus.NOT_FOUND.getReasonPhrase(), illegalArgumentException.getMessage());
+    }
+
+    @ResponseBody
+    @ExceptionHandler(DataAccessException.class)
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+    public ErrorResponse handleDatabaseException(DataAccessException ex) {
+        log.error("Database connection error: {}", ex.getMessage(), ex);
+        return buildErrorResponse(HttpStatus.SERVICE_UNAVAILABLE.getReasonPhrase(),
+                "There was a problem connecting to the database. Please try again later.");
     }
 
     private ErrorResponse buildErrorResponse(String errorCode, String errorMessage) {
