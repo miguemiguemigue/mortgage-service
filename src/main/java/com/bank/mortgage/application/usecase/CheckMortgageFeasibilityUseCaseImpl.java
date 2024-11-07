@@ -42,7 +42,7 @@ public class CheckMortgageFeasibilityUseCaseImpl implements CheckMortgageFeasibi
             log.error("No mortgage rate was found related to maturity period of: {} years. Cannot check mortgage feasibility",
                     maturityPeriod);
             throw new MortgageNotFoundException(
-                    String.format("Could not find mortgage rate for maturity period %s", maturityPeriod)
+                    String.format("Could not find mortgage rate for maturity period of %s years", maturityPeriod)
             );
         }
 

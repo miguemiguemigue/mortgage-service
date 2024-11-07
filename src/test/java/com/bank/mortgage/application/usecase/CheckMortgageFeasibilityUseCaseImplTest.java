@@ -90,7 +90,7 @@ class CheckMortgageFeasibilityUseCaseImplTest {
         assertThatExceptionOfType(MortgageNotFoundException.class)
                 .isThrownBy(() -> checkMortgageFeasibilityUseCase.checkMortgageFeasibility(maturityPeriod, income,
                         loanValue, homeValue))
-                .withMessage("Could not find mortgage rate for maturity period 10");
+                .withMessage("Could not find mortgage rate for maturity period of 10 years");
 
         // Then
         verify(mortgageRateRepositoryPort).findByMaturityPeriod(eq(maturityPeriod));

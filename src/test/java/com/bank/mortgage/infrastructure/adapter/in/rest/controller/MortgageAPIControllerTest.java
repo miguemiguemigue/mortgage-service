@@ -42,6 +42,9 @@ class MortgageAPIControllerTest {
     @MockBean
     private CheckMortgageFeasibilityUseCase checkMortgageFeasibilityUseCase;
 
+    /**
+     * Checks getInterestRate endpoint return the mortgage rate list
+     */
     @Test
     void getInterestRates_Given_valid_request_Then_return_rates() throws Exception {
         // Given:
@@ -75,6 +78,9 @@ class MortgageAPIControllerTest {
         verify(getAllMortgageRatesUseCase).getAllMortgageRates();
     }
 
+    /**
+     * Checks checkMortgageFeasibility endpoint return the feasibility of a mortgage check
+     */
     @Test
     void checkMortgageFeasibility_Given_valid_request_Then_return_mortgage_check_result() throws Exception {
         // Given:
@@ -110,6 +116,9 @@ class MortgageAPIControllerTest {
         verify(checkMortgageFeasibilityUseCase).checkMortgageFeasibility(eq(20), eq(BigDecimal.valueOf(5000.0)), eq(BigDecimal.valueOf(150000.0)), eq(BigDecimal.valueOf(200000.0)));
     }
 
+    /**
+     * Checks checkMortgageFeasibility endpoint return bad request error in case of negative maturity period
+     */
     @Test
     void checkMortgageFeasibility_Given_negative_maturity_Then_return_bad_request() throws Exception {
         // Given:
@@ -131,6 +140,9 @@ class MortgageAPIControllerTest {
         verify(checkMortgageFeasibilityUseCase, never()).checkMortgageFeasibility(any(), any(), any(), any());
     }
 
+    /**
+     * Checks checkMortgageFeasibility endpoint return bad request error in case of null maturity period
+     */
     @Test
     void checkMortgageFeasibility_Given_null_maturity_Then_return_bad_request() throws Exception {
         // Given:
@@ -153,7 +165,9 @@ class MortgageAPIControllerTest {
         verify(checkMortgageFeasibilityUseCase, never()).checkMortgageFeasibility(any(), any(), any(), any());
     }
 
-
+    /**
+     * Checks checkMortgageFeasibility endpoint return bad request error in case of negative income
+     */
     @Test
     void checkMortgageFeasibility_Given_negative_income_Then_return_bad_request() throws Exception {
         // Given:
@@ -175,6 +189,9 @@ class MortgageAPIControllerTest {
         verify(checkMortgageFeasibilityUseCase, never()).checkMortgageFeasibility(any(), any(), any(), any());
     }
 
+    /**
+     * Checks checkMortgageFeasibility endpoint return bad request error in case of null income
+     */
     @Test
     void checkMortgageFeasibility_Given_null_income_Then_return_bad_request() throws Exception {
         // Given:
@@ -197,6 +214,9 @@ class MortgageAPIControllerTest {
         verify(checkMortgageFeasibilityUseCase, never()).checkMortgageFeasibility(any(), any(), any(), any());
     }
 
+    /**
+     * Checks checkMortgageFeasibility endpoint return bad request error in case of negative loan value
+     */
     @Test
     void checkMortgageFeasibility_Given_negative_loan_value_Then_return_bad_request() throws Exception {
         // Given:
@@ -218,6 +238,9 @@ class MortgageAPIControllerTest {
         verify(checkMortgageFeasibilityUseCase, never()).checkMortgageFeasibility(any(), any(), any(), any());
     }
 
+    /**
+     * Checks checkMortgageFeasibility endpoint return bad request error in case of null loan value
+     */
     @Test
     void checkMortgageFeasibility_Given_null_loan_value_Then_return_bad_request() throws Exception {
         // Given:
@@ -239,6 +262,9 @@ class MortgageAPIControllerTest {
         verify(checkMortgageFeasibilityUseCase, never()).checkMortgageFeasibility(any(), any(), any(), any());
     }
 
+    /**
+     * Checks checkMortgageFeasibility endpoint return bad request error in case of negative home value
+     */
     @Test
     void checkMortgageFeasibility_Given_negative_home_value_Then_return_bad_request() throws Exception {
         // Given:
@@ -260,6 +286,9 @@ class MortgageAPIControllerTest {
         verify(checkMortgageFeasibilityUseCase, never()).checkMortgageFeasibility(any(), any(), any(), any());
     }
 
+    /**
+     * Checks checkMortgageFeasibility endpoint return bad request error in case of null home value
+     */
     @Test
     void checkMortgageFeasibility_Given_null_home_value_Then_return_bad_request() throws Exception {
         // Given:
