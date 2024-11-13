@@ -16,11 +16,11 @@ public class MortgageRateEntityMapper {
             return null;
         }
 
-        return MortgageRate.builder()
-                .maturityPeriod(mortgageRateEntity.getMaturityPeriod())
-                .interestRate(mortgageRateEntity.getInterestRate())
-                .lastUpdate(mortgageRateEntity.getLastUpdate())
-                .build();
+        return new MortgageRate(
+                mortgageRateEntity.getMaturityPeriod(),
+                mortgageRateEntity.getInterestRate(),
+                mortgageRateEntity.getLastUpdate()
+        );
 
     }
 

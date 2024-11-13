@@ -18,9 +18,9 @@ public class MortgageRateResponseMapper {
 
         // OpenAPI generator doesn't provide builder function
         MortgageRateResponse mortgageRateResponse = new MortgageRateResponse();
-        mortgageRateResponse.setMaturityPeriod(mortgageRate.getMaturityPeriod());
-        mortgageRateResponse.setInterestRate(mortgageRate.getInterestRate().doubleValue());
-        mortgageRateResponse.setLastUpdate(mortgageRate.getLastUpdate());
+        mortgageRateResponse.setMaturityPeriod(mortgageRate.maturityPeriod());
+        mortgageRateResponse.setInterestRate(mortgageRate.interestRate().doubleValue());
+        mortgageRateResponse.setLastUpdate(mortgageRate.lastUpdate());
 
         return mortgageRateResponse;
 

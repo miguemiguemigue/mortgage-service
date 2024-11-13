@@ -4,11 +4,10 @@ import com.bank.mortgage.domain.entity.MortgageApplicant;
 import com.bank.mortgage.domain.entity.MortgageRate;
 import com.bank.mortgage.domain.exception.MortgageDomainException;
 import com.bank.mortgage.domain.model.MortgageFeasibilityResult;
-import org.assertj.core.data.Percentage;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
@@ -24,17 +23,18 @@ public class MortgageDomainServiceTest {
     @Test
     public void testCheckMortgageFeasibility_Given_loan_greater_than_four_times_income_Then_mortgage_is_not_feasible() {
         // Given:
-        MortgageRate mortgageRate = MortgageRate.builder()
-                .maturityPeriod(10) // 10 years
-                .interestRate(BigDecimal.valueOf(0.05)) // 5%
-                .build();
+        MortgageRate mortgageRate = new MortgageRate(
+                10, // 10 years
+                BigDecimal.valueOf(0.05), // 5%,
+                LocalDateTime.now()
+        );
 
         // loan value greater than four times the income
-        MortgageApplicant mortgageApplicant = MortgageApplicant.builder()
-                .income(BigDecimal.valueOf(5000))
-                .loanValue(BigDecimal.valueOf(90000))
-                .homeValue(BigDecimal.valueOf(100000))
-                .build();
+        MortgageApplicant mortgageApplicant = new MortgageApplicant(
+                BigDecimal.valueOf(5000),
+                BigDecimal.valueOf(90000),
+                BigDecimal.valueOf(100000)
+        );
 
         // When:
         MortgageFeasibilityResult result = mortgageDomainService.checkMortgageFeasibility(mortgageRate, mortgageApplicant);
@@ -50,17 +50,18 @@ public class MortgageDomainServiceTest {
     @Test
     public void testCheckMortgageFeasibility_Given_loan_greater_than_home_value_Then_mortgage_is_not_feasible() {
         // Given:
-        MortgageRate mortgageRate = MortgageRate.builder()
-                .maturityPeriod(10) // 10 years
-                .interestRate(BigDecimal.valueOf(0.05)) // 5%
-                .build();
+        MortgageRate mortgageRate = new MortgageRate(
+                10, // 10 years
+                BigDecimal.valueOf(0.05), // 5%
+                LocalDateTime.now() // Current timestamp for last update
+        );
 
         // loan value greater than home value
-        MortgageApplicant mortgageApplicant = MortgageApplicant.builder()
-                .income(BigDecimal.valueOf(100000))
-                .loanValue(BigDecimal.valueOf(110000))
-                .homeValue(BigDecimal.valueOf(100000))
-                .build();
+        MortgageApplicant mortgageApplicant = new MortgageApplicant(
+                BigDecimal.valueOf(100000),
+                BigDecimal.valueOf(110000),
+                BigDecimal.valueOf(100000)
+        );
 
         // When:
         MortgageFeasibilityResult result = mortgageDomainService.checkMortgageFeasibility(mortgageRate, mortgageApplicant);
@@ -76,16 +77,18 @@ public class MortgageDomainServiceTest {
     @Test
     public void testCheckMortgageFeasibility_Given_feasible_mortgage_Then_calculates_correct_monthly_cost() {
         // Given
-        MortgageRate mortgageRate = MortgageRate.builder()
-                .maturityPeriod(10) // 10 years
-                .interestRate(BigDecimal.valueOf(0.05)) // 5%
-                .build();
+        MortgageRate mortgageRate = new MortgageRate(
+                10, // 10 years
+                BigDecimal.valueOf(0.05), // 5%
+                LocalDateTime.now()
+        );
 
-        MortgageApplicant mortgageApplicant = MortgageApplicant.builder()
-                .income(BigDecimal.valueOf(5000))
-                .loanValue(BigDecimal.valueOf(10000))
-                .homeValue(BigDecimal.valueOf(100000))
-                .build();
+        MortgageApplicant mortgageApplicant = new MortgageApplicant(
+                BigDecimal.valueOf(5000),
+                BigDecimal.valueOf(10000),
+                BigDecimal.valueOf(100000)
+        );
+
         BigDecimal expectedMonthlyCost = BigDecimal.valueOf(106.07); // fixed-rate mortgage payment formula
 
         // When:
@@ -102,22 +105,24 @@ public class MortgageDomainServiceTest {
     @Test
     public void testCheckMortgageFeasibility_Given_null_or_negative_income_Then_throws_MortgageDomainException() {
         // Given:
-        MortgageRate mortgageRate = MortgageRate.builder()
-                .maturityPeriod(10)
-                .interestRate(BigDecimal.valueOf(0.05))
-                .build();
+        MortgageRate mortgageRate = new MortgageRate(
+                10, // 10 years
+                BigDecimal.valueOf(0.05), // 5%
+                LocalDateTime.now() // Current timestamp for last update
+        );
 
-        MortgageApplicant mortgageApplicantWithNullIncome = MortgageApplicant.builder()
-                .income(null) // null income
-                .loanValue(BigDecimal.valueOf(50000))
-                .homeValue(BigDecimal.valueOf(100000))
-                .build();
+        MortgageApplicant mortgageApplicantWithNullIncome = new MortgageApplicant(
+                null, // null income
+                BigDecimal.valueOf(50000),
+                BigDecimal.valueOf(100000)
+        );
 
-        MortgageApplicant mortgageApplicantWithNegativeIncome = MortgageApplicant.builder()
-                .income(BigDecimal.valueOf(-1000)) // negative income
-                .loanValue(BigDecimal.valueOf(50000))
-                .homeValue(BigDecimal.valueOf(100000))
-                .build();
+
+        MortgageApplicant mortgageApplicantWithNegativeIncome = new MortgageApplicant(
+                BigDecimal.valueOf(-1000), // negative income
+                BigDecimal.valueOf(50000),
+                BigDecimal.valueOf(100000)
+        );
 
         // Then:
         assertThatExceptionOfType(MortgageDomainException.class)
@@ -135,22 +140,23 @@ public class MortgageDomainServiceTest {
     @Test
     public void testCheckMortgageFeasibility_Given_null_or_negative_loan_value_Then_throws_MortgageDomainException() {
         // Given:
-        MortgageRate mortgageRate = MortgageRate.builder()
-                .maturityPeriod(10)
-                .interestRate(BigDecimal.valueOf(0.05))
-                .build();
+        MortgageRate mortgageRate = new MortgageRate(
+                10, // 10 years
+                BigDecimal.valueOf(0.05), // 5%
+                LocalDateTime.now() // Current timestamp for last update
+        );
 
-        MortgageApplicant mortgageApplicantWithNullLoanValue = MortgageApplicant.builder()
-                .income(BigDecimal.valueOf(5000))
-                .loanValue(null) // null home value
-                .homeValue(BigDecimal.valueOf(100000))
-                .build();
+        MortgageApplicant mortgageApplicantWithNullLoanValue = new MortgageApplicant(
+                BigDecimal.valueOf(5000),
+                null, // null home value
+                BigDecimal.valueOf(100000)
+        );
 
-        MortgageApplicant mortgageApplicantWithNegativeLoanValue = MortgageApplicant.builder()
-                .income(BigDecimal.valueOf(5000))
-                .loanValue(BigDecimal.valueOf(-10000)) // negative loan value
-                .homeValue(BigDecimal.valueOf(100000))
-                .build();
+        MortgageApplicant mortgageApplicantWithNegativeLoanValue = new MortgageApplicant(
+                BigDecimal.valueOf(5000),
+                BigDecimal.valueOf(-10000), // negative loan value
+                BigDecimal.valueOf(100000)
+        );
 
         // Then:
         assertThatExceptionOfType(MortgageDomainException.class)
@@ -168,22 +174,23 @@ public class MortgageDomainServiceTest {
     @Test
     public void testCheckMortgageFeasibility_Given_null_or_negative_home_value_Then_throws_MortgageDomainException() {
         // Given:
-        MortgageRate mortgageRate = MortgageRate.builder()
-                .maturityPeriod(10)
-                .interestRate(BigDecimal.valueOf(0.05))
-                .build();
+        MortgageRate mortgageRate = new MortgageRate(
+                10, // 10 years
+                BigDecimal.valueOf(0.05), // 5%
+                LocalDateTime.now() // Current timestamp for last update
+        );
 
-        MortgageApplicant mortgageApplicantWithNullHomeValue = MortgageApplicant.builder()
-                .income(BigDecimal.valueOf(5000))
-                .loanValue(BigDecimal.valueOf(50000))
-                .homeValue(null) // null home value
-                .build();
+        MortgageApplicant mortgageApplicantWithNullHomeValue = new MortgageApplicant(
+                BigDecimal.valueOf(5000),
+                BigDecimal.valueOf(50000),
+                null // null home value
+        );
 
-        MortgageApplicant mortgageApplicantWithNegativeHomeValue = MortgageApplicant.builder()
-                .income(BigDecimal.valueOf(5000))
-                .loanValue(BigDecimal.valueOf(50000))
-                .homeValue(BigDecimal.valueOf(-100000)) // negative home value
-                .build();
+        MortgageApplicant mortgageApplicantWithNegativeHomeValue = new MortgageApplicant(
+                BigDecimal.valueOf(5000),
+                BigDecimal.valueOf(50000),
+                BigDecimal.valueOf(-100000) // negative home value
+        );
 
         // Then
         assertThatExceptionOfType(MortgageDomainException.class)
@@ -201,21 +208,23 @@ public class MortgageDomainServiceTest {
     @Test
     public void testCheckMortgageFeasibility_Given_null_or_negative_maturity_period_Then_throws_MortgageDomainException() {
         // Given:
-        MortgageRate mortgageRateWithNullMaturity = MortgageRate.builder()
-                .maturityPeriod(null)  // null maturity
-                .interestRate(BigDecimal.valueOf(0.05))
-                .build();
+        MortgageRate mortgageRateWithNullMaturity = new MortgageRate(
+                null, // null maturity
+                BigDecimal.valueOf(0.05), // Interest rate of 5%
+                LocalDateTime.now() // Current timestamp for last update
+        );
 
-        MortgageRate mortgageRateWithNegativeMaturity = MortgageRate.builder()
-                .maturityPeriod(-3)  // not positive maturity period
-                .interestRate(BigDecimal.valueOf(0.05))
-                .build();
+        MortgageRate mortgageRateWithNegativeMaturity = new MortgageRate(
+                -3, // Not a positive maturity period
+                BigDecimal.valueOf(0.05), // Interest rate of 5%
+                LocalDateTime.now() // Current timestamp for last update
+        );
 
-        MortgageApplicant mortgageApplicant = MortgageApplicant.builder()
-                .income(BigDecimal.valueOf(5000))
-                .loanValue(BigDecimal.valueOf(30000))
-                .homeValue(BigDecimal.valueOf(100000))
-                .build();
+        MortgageApplicant mortgageApplicant = new MortgageApplicant(
+                BigDecimal.valueOf(5000),
+                BigDecimal.valueOf(30000),
+                BigDecimal.valueOf(100000)
+        );
 
         // Then:
         assertThatExceptionOfType(MortgageDomainException.class)

@@ -64,10 +64,10 @@ public class MortgageRateRepositoryAdapterIntegrationTest {
 
         // Then:
         assertThat(mortgageRates).hasSize(2);
-        assertThat(mortgageRates.get(0).getMaturityPeriod()).isEqualTo(mortgageRate1MaturityPeriod);
-        assertThat(mortgageRates.get(0).getInterestRate()).isEqualTo(mortgageRate1InterestRate);
-        assertThat(mortgageRates.get(1).getMaturityPeriod()).isEqualTo(mortgageRate2MaturityPeriod);
-        assertThat(mortgageRates.get(1).getInterestRate()).isEqualTo(mortgageRate2InterestRate);
+        assertThat(mortgageRates.get(0).maturityPeriod()).isEqualTo(mortgageRate1MaturityPeriod);
+        assertThat(mortgageRates.get(0).interestRate()).isEqualTo(mortgageRate1InterestRate);
+        assertThat(mortgageRates.get(1).maturityPeriod()).isEqualTo(mortgageRate2MaturityPeriod);
+        assertThat(mortgageRates.get(1).interestRate()).isEqualTo(mortgageRate2InterestRate);
     }
 
     /**
@@ -116,8 +116,8 @@ public class MortgageRateRepositoryAdapterIntegrationTest {
 
         // Then:
         assertThat(mortgageRate).isNotNull();
-        assertThat(mortgageRate.getMaturityPeriod()).isEqualTo(mortgageRate2MaturityPeriod);
-        assertThat(mortgageRate.getInterestRate()).isEqualTo(mortgageRate2InterestRate);
+        assertThat(mortgageRate.maturityPeriod()).isEqualTo(mortgageRate2MaturityPeriod);
+        assertThat(mortgageRate.interestRate()).isEqualTo(mortgageRate2InterestRate);
     }
 
     /**

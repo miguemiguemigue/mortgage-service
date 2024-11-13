@@ -41,17 +41,9 @@ class CheckMortgageFeasibilityUseCaseImplTest {
         BigDecimal loanValue = BigDecimal.valueOf(7000);
         BigDecimal homeValue = BigDecimal.valueOf(60000);
 
-        MortgageRate mortgageRate = MortgageRate.builder()
-                .maturityPeriod(10)
-                .interestRate(BigDecimal.valueOf(0.1))
-                .lastUpdate(LocalDateTime.now())
-                .build();
+        MortgageRate mortgageRate = new MortgageRate(10,BigDecimal.valueOf(0.1),LocalDateTime.now());
 
-        MortgageApplicant mortgageApplicant = MortgageApplicant.builder()
-                .income(income)
-                .loanValue(loanValue)
-                .homeValue(homeValue)
-                .build();
+        MortgageApplicant mortgageApplicant = new MortgageApplicant(income, loanValue, homeValue);
 
         Optional<MortgageRate> mortgageRate1 = Optional.of(mortgageRate);
         when(mortgageRateRepositoryPort.findByMaturityPeriod(maturityPeriod))
