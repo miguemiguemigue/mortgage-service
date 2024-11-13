@@ -46,11 +46,7 @@ public class CheckMortgageFeasibilityUseCaseImpl implements CheckMortgageFeasibi
             );
         }
 
-        MortgageApplicant mortgageApplicant = MortgageApplicant.builder()
-                .income(income)
-                .loanValue(loanValue)
-                .homeValue(homeValue)
-                .build();
+        MortgageApplicant mortgageApplicant = new MortgageApplicant(income, loanValue, homeValue);
 
         return mortgageDomainService.checkMortgageFeasibility(mortgageRate.get(), mortgageApplicant);
     }

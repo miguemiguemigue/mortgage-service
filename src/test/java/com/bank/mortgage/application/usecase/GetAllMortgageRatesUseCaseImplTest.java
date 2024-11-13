@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
@@ -32,17 +31,8 @@ class GetAllMortgageRatesUseCaseImplTest {
         // Given:
         LocalDateTime date = LocalDateTime.now();
 
-        MortgageRate mr1 = MortgageRate.builder()
-                .maturityPeriod(5)
-                .interestRate(BigDecimal.valueOf(0.05))
-                .lastUpdate(date)
-                .build();
-
-        MortgageRate mr2 = MortgageRate.builder()
-                .maturityPeriod(10)
-                .interestRate(BigDecimal.valueOf(0.05))
-                .lastUpdate(date)
-                .build();
+        MortgageRate mr1 = new MortgageRate(5, BigDecimal.valueOf(0.05), date);
+        MortgageRate mr2 = new MortgageRate(10, BigDecimal.valueOf(0.05), date);
 
         when(mortgageRateRepositoryPort.findAllMortgageRates())
                 .thenReturn(List.of(mr1, mr2));

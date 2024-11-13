@@ -29,8 +29,8 @@ public class MortgageDomainService {
         validateMortgageData(mortgageRate, mortgageApplicant);
 
         log.info("Calculating mortgage feasibility for income: {}, home value: {}, maturity period: {} years, loan: {}",
-                mortgageApplicant.getIncome(), mortgageApplicant.getHomeValue(), mortgageRate.getMaturityPeriod(),
-                mortgageApplicant.getLoanValue());
+                mortgageApplicant.income(), mortgageApplicant.homeValue(), mortgageRate.interestRate(),
+                mortgageApplicant.loanValue());
 
         /*
         Check mortgage feasibility. A mortgage should not exceed:
@@ -38,9 +38,9 @@ public class MortgageDomainService {
             - The home value
          */
 
-        BigDecimal maxAllowedLoanByIncome = mortgageApplicant.getIncome().multiply(BigDecimal.valueOf(4));
-        boolean loanExceedsFourTimesIncome = mortgageApplicant.getLoanValue().compareTo(maxAllowedLoanByIncome) > 0;
-        boolean loanExceedsHomeValue = mortgageApplicant.getLoanValue().compareTo(mortgageApplicant.getHomeValue()) > 0;
+        BigDecimal maxAllowedLoanByIncome = mortgageApplicant.income().multiply(BigDecimal.valueOf(4));
+        boolean loanExceedsFourTimesIncome = mortgageApplicant.loanValue().compareTo(maxAllowedLoanByIncome) > 0;
+        boolean loanExceedsHomeValue = mortgageApplicant.loanValue().compareTo(mortgageApplicant.homeValue()) > 0;
 
         if (loanExceedsFourTimesIncome) {
             log.info("Loan exceeds 4 times the income. Mortgage is not feasible.");
@@ -58,8 +58,8 @@ public class MortgageDomainService {
                     .build();
         }
         // If feasible, calculates monthly cost
-        BigDecimal monthlyCost = calculateMonthlyCostFixedRateMortgage(mortgageRate.getMaturityPeriod(),
-                mortgageRate.getInterestRate(), mortgageApplicant.getLoanValue());
+        BigDecimal monthlyCost = calculateMonthlyCostFixedRateMortgage(mortgageRate.maturityPeriod(),
+                mortgageRate.interestRate(), mortgageApplicant.loanValue());
 
 
         log.info("Mortgage is feasible. Calculated monthly cost: {}", monthlyCost);
@@ -109,23 +109,23 @@ public class MortgageDomainService {
      */
     private void validateMortgageData(MortgageRate mortgageRate, MortgageApplicant mortgageApplicant) {
         // Validaciones de entrada
-        if (mortgageApplicant.getIncome() == null || mortgageApplicant.getIncome().compareTo(BigDecimal.ZERO) <= 0) {
-            log.error("Invalid income: {}. It must be greater than zero.", mortgageApplicant.getIncome());
+        if (mortgageApplicant.income() == null || mortgageApplicant.income().compareTo(BigDecimal.ZERO) <= 0) {
+            log.error("Invalid income: {}. It must be greater than zero.", mortgageApplicant.income());
             throw new MortgageDomainException("Invalid income: It must be greater than zero.");
         }
 
-        if (mortgageApplicant.getLoanValue() == null || mortgageApplicant.getLoanValue().compareTo(BigDecimal.ZERO) <= 0) {
-            log.error("Invalid loan value: {}. It must be greater than zero.", mortgageApplicant.getLoanValue());
+        if (mortgageApplicant.loanValue() == null || mortgageApplicant.loanValue().compareTo(BigDecimal.ZERO) <= 0) {
+            log.error("Invalid loan value: {}. It must be greater than zero.", mortgageApplicant.loanValue());
             throw new MortgageDomainException("Invalid loan value: It must be greater than zero.");
         }
 
-        if (mortgageApplicant.getHomeValue() == null || mortgageApplicant.getHomeValue().compareTo(BigDecimal.ZERO) <= 0) {
-            log.error("Invalid home value: {}. It must be greater than zero.", mortgageApplicant.getHomeValue());
+        if (mortgageApplicant.homeValue() == null || mortgageApplicant.homeValue().compareTo(BigDecimal.ZERO) <= 0) {
+            log.error("Invalid home value: {}. It must be greater than zero.", mortgageApplicant.homeValue());
             throw new MortgageDomainException("Invalid home value: It must be greater than zero.");
         }
 
-        if (mortgageRate.getMaturityPeriod() == null || mortgageRate.getMaturityPeriod() <= 0) {
-            log.error("Invalid maturity period: {}. It must be greater than zero.", mortgageRate.getMaturityPeriod());
+        if (mortgageRate.maturityPeriod() == null || mortgageRate.maturityPeriod() <= 0) {
+            log.error("Invalid maturity period: {}. It must be greater than zero.", mortgageRate.maturityPeriod());
             throw new MortgageDomainException("Invalid maturity period: It must be greater than zero.");
         }
     }

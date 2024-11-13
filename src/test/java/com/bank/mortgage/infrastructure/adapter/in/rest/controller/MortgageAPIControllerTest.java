@@ -48,16 +48,9 @@ class MortgageAPIControllerTest {
     @Test
     void getInterestRates_Given_valid_request_Then_return_rates() throws Exception {
         // Given:
-        MortgageRate mr1 = MortgageRate.builder()
-                .interestRate(BigDecimal.valueOf(0.03))
-                .maturityPeriod(15)
-                .lastUpdate(LocalDateTime.now())
-                .build();
-        MortgageRate mr2 = MortgageRate.builder()
-                .interestRate(BigDecimal.valueOf(0.05))
-                .maturityPeriod(30)
-                .lastUpdate(LocalDateTime.now())
-                .build();
+        MortgageRate mr1 = new MortgageRate(15, BigDecimal.valueOf(0.03), LocalDateTime.now());
+        MortgageRate mr2 = new MortgageRate(30, BigDecimal.valueOf(0.05), LocalDateTime.now());
+
         List<MortgageRate> mortgageRates = Arrays.asList(
                 mr1,
                 mr2
@@ -69,12 +62,12 @@ class MortgageAPIControllerTest {
         mockMvc.perform(get("/v1/api/interest-rates"))
                 // Then:
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].maturityPeriod").value(mr1.getMaturityPeriod()))
-                .andExpect(jsonPath("$[0].interestRate").value(mr1.getInterestRate()))
-                .andExpect(jsonPath("$[0].lastUpdate").value(mr1.getLastUpdate().truncatedTo(ChronoUnit.MILLIS).toString()))
-                .andExpect(jsonPath("$[1].maturityPeriod").value(mr2.getMaturityPeriod()))
-                .andExpect(jsonPath("$[1].interestRate").value(mr2.getInterestRate()))
-                .andExpect(jsonPath("$[1].lastUpdate").value(mr2.getLastUpdate().truncatedTo(ChronoUnit.MILLIS).toString()));
+                .andExpect(jsonPath("$[0].maturityPeriod").value(mr1.maturityPeriod()))
+                .andExpect(jsonPath("$[0].interestRate").value(mr1.interestRate()))
+                .andExpect(jsonPath("$[0].lastUpdate").value(mr1.lastUpdate().truncatedTo(ChronoUnit.MILLIS).toString()))
+                .andExpect(jsonPath("$[1].maturityPeriod").value(mr2.maturityPeriod()))
+                .andExpect(jsonPath("$[1].interestRate").value(mr2.interestRate()))
+                .andExpect(jsonPath("$[1].lastUpdate").value(mr2.lastUpdate().truncatedTo(ChronoUnit.MILLIS).toString()));
         verify(getAllMortgageRatesUseCase).getAllMortgageRates();
     }
 
